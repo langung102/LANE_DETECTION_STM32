@@ -127,7 +127,7 @@ int main(void)
 		  count = 0;
 		  count_flag = 1;
 		  flag = HoughLineDetector(test_pgm, W, H, scalex, scaley, 50, 150, 1,
-				  PI / 180, 30, 20, 40, HOUGH_LINE_PROBABILISTIC, Bbox, Lines);
+				  PI / 180, 20, 10, 20, HOUGH_LINE_PROBABILISTIC, Bbox, Lines);
 			for (vector<line_float_t>::iterator i=Lines.begin(); i != Lines.end();)
 			{
 				float s = slope((*i).startx, (*i).starty, (*i).endx, (*i).endy);
