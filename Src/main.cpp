@@ -120,41 +120,48 @@ int main(void)
   while (1)
   {
 	  if (check_button_flag(0)) {
-		  for (int i=0; i<35; i++) {
-			  a[i] = '\0';
-		  }
 
-		  count = 0;
-		  count_flag = 1;
-		  flag = HoughLineDetector(test_pgm, W, H, scalex, scaley, 50, 150, 1,
-				  PI / 180, 20, 10, 20, HOUGH_LINE_PROBABILISTIC, Bbox, Lines);
-			for (vector<line_float_t>::iterator i=Lines.begin(); i != Lines.end();)
-			{
-				float s = slope((*i).startx, (*i).starty, (*i).endx, (*i).endy);
-				if (!((s > 0.3 && s < 1.74) || (s<-0.7 && s>-1.7))) {
-					i = Lines.erase(i);
-				}
-				else {
-					i++;
-				}
-			}
-		  count_flag = 0;
-
-		  if (flag == 0) {
-			  for (int i=0; i<(int) Lines.size(); i++) {
-				  if (i==0) {
-					  sprintf((char*) a, "%ld;%d %d %d %d;", count, (int)Lines[i].startx, (int)Lines[i].starty, (int)Lines[i].endx, (int)Lines[i].endy);
-					  HAL_UART_Transmit(&huart3, a, strlen((char*)a), 1000);
-				  } else {
-					  sprintf((char*) a, "%d %d %d %d;", (int)Lines[i].startx, (int)Lines[i].starty, (int)Lines[i].endx, (int)Lines[i].endy);
-					  HAL_UART_Transmit(&huart3, a, strlen((char*)a), 1000);
-				  }
-				  memset((char*)a,0,strlen((char*)a));
+			  for (int i=0; i<42; i++) {
+					  a[i] = '\0';
 			  }
-		  } else {
-			  sprintf((char*) a, "%s", ERROR);
-			  HAL_UART_Transmit(&huart3, a, strlen((char*)a), 1000);
-		  }
+
+			  count = 0;
+			  count_flag = 1;
+			  flag = HoughLineDetector(test_pgm, W, H, scalex, scaley, 10, 52, 1,
+					  PI / 180, 20, 10, 20, HOUGH_LINE_PROBABILISTIC, Bbox, Lines);
+				for (vector<line_float_t>::iterator i=Lines.begin(); i != Lines.end();)
+				{
+					float s = slope((*i).startx, (*i).starty, (*i).endx, (*i).endy);
+					if (!((s > 0.3 && s < 1.74) || (s<-0.7 && s>-1.7))) {
+						i = Lines.erase(i);
+					}
+					else {
+						i++;
+					}
+				}
+			  count_flag = 0;
+
+			  if (flag == 0) {
+				  if (Lines.empty()) {
+					  sprintf((char*) a, "%ld;%d %d %d %d;", count, 0, 0, 0, 0);
+					  HAL_UART_Transmit(&huart3, a, strlen((char*)a), 1000);
+					  memset((char*)a,0,strlen((char*)a));
+				  } else {
+					  for (int i=0; i<(int) Lines.size(); i++) {
+						  if (i==0) {
+							  sprintf((char*) a, "%ld;%d %d %d %d;", count, (int)Lines[i].startx, (int)Lines[i].starty, (int)Lines[i].endx, (int)Lines[i].endy);
+							  HAL_UART_Transmit(&huart3, a, strlen((char*)a), 1000);
+						  } else {
+							  sprintf((char*) a, "%d %d %d %d;", (int)Lines[i].startx, (int)Lines[i].starty, (int)Lines[i].endx, (int)Lines[i].endy);
+							  HAL_UART_Transmit(&huart3, a, strlen((char*)a), 1000);
+						  }
+						  memset((char*)a,0,strlen((char*)a));
+					  }
+				  }
+			  } else {
+				  sprintf((char*) a, "%s", ERROR);
+				  HAL_UART_Transmit(&huart3, a, strlen((char*)a), 1000);
+			  }
 	  }
 	  if (timer0_flag == 1) {
 		  HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
