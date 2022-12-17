@@ -1112,11 +1112,6 @@ int HoughLineDetector(unsigned char* src, int w, int h,
 		_type,
 		bbox, lines);
 
-//	for (int i = 0; i < lines.size(); i++) {
-//		lines[i].startx = (lines[i].startx <= 15)? 0 : lines[i].startx -= 15;
-//		lines[i].endx = (lines[i].endx <= 15)? 0 : lines[i].endx -= 15;
-//	}
-
 	return 0;
 }
 
